@@ -26,6 +26,9 @@ namespace courseWork.SimulationModeling
             }
         }
 
+        int m_failuresCounter;
+        public int FailuresCounter => m_failuresCounter; //счетчик отказов
+
         protected Node m_currentNode;
 
         Random r = new Random();
@@ -51,6 +54,8 @@ namespace courseWork.SimulationModeling
             double t = 0;
             while (t < tLimit)
                 TransferToNextNode(ref t);
+
+            System.Diagnostics.Debug.WriteLine("Failures: " + m_failuresCounter);
         }
 
         private void TransferToNextNode(ref double t)
@@ -62,16 +67,25 @@ namespace courseWork.SimulationModeling
 
             var orderedChildren = children.OrderBy(ch => ch.Interval).ToArray();
 
-            double minInterval = orderedChildren[0].Interval;
-            m_currentNode.AddTime(minInterval);
+            NodeIntensityObject nextObject = null;
+            if (orderedChildren[0].Node == null)
+            {
+                nextObject = orderedChildren[1];
+                m_failuresCounter++;
+            }
+            else
+                nextObject = orderedChildren[0];
+
+            double interval = nextObject.Interval;
+            m_currentNode.AddTime(interval);
 
             System.Diagnostics.Debug.WriteLine("time: " + m_currentNode.Time);
 
-            t += minInterval;
+            t += interval;
             timeList.Add(t);
 
             //переходим к следующему элементу
-            SetNextNode(orderedChildren[0].Node);
+            SetNextNode(nextObject.Node);
 
             //подсчет вероятностей
             CalcStatistics(t);
