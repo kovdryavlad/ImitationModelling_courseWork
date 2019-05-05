@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace courseWork
 {
@@ -33,11 +34,15 @@ namespace courseWork
 
             chart1.ChartAreas[0].AxisX.LabelStyle.Format = "{0:0.0}";
             chart1.ChartAreas[0].AxisY.LabelStyle.Format = "{0:0.00}";
+
+            chart1.ChartAreas[0].AxisY.Maximum = 1;
+            chart1.ChartAreas[0].AxisY.Minimum = 0;
         }
 
-        double m_a;
-        double m_b;
-        int m_n;
+        double m_lyabmbda;
+        double m_mu;
+        int m_maxTime;
+        int m_queueLength;
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -45,30 +50,25 @@ namespace courseWork
 
             if (status)
             {
-                //численное решение
-                SpecificTaskRungeKutta rk = new SpecificTaskRungeKutta(m_a, m_b, m_n);
-                rk.Solve();
-
-                chart1.Series[3].Points.DataBindXY(rk.X, rk.P0);
-                chart1.Series[4].Points.DataBindXY(rk.X, rk.P1);
-                chart1.Series[5].Points.DataBindXY(rk.X, rk.P2);
-
-                //аланалитическое решение
-                AnalyticalSolution analyticalSolution = new AnalyticalSolution();
-                analyticalSolution.CalcSolution(rk.X);
-
-                chart1.Series[0].Points.DataBindXY(rk.X, analyticalSolution.P0);
-                chart1.Series[1].Points.DataBindXY(rk.X, analyticalSolution.P1);
-                chart1.Series[2].Points.DataBindXY(rk.X, analyticalSolution.P2);
-
                 //имитационное моделирование
                 SpecificSystem specificSystem = new SpecificSystem();
-                specificSystem.Model(m_b);
+                specificSystem.SetProcessingParams(m_lyabmbda, m_mu, m_queueLength);                
+                specificSystem.Model(m_maxTime);
                 List<List<double>> imitationProbabilities = specificSystem.Probabilities;
 
-                chart1.Series[6].Points.DataBindXY(specificSystem.timeList, imitationProbabilities[0]);
-                chart1.Series[7].Points.DataBindXY(specificSystem.timeList, imitationProbabilities[1]);
-                chart1.Series[8].Points.DataBindXY(specificSystem.timeList, imitationProbabilities[2]);
+                chart1.Series.Clear();
+
+                for (int i = 0; i < imitationProbabilities.Count; i++)
+                {
+                    Series s = new Series();
+                    s.ChartType = SeriesChartType.Line;
+                    s.Name = "p" + i;
+                    s.Points.DataBindXY(specificSystem.timeList, imitationProbabilities[i]);
+                    chart1.Series.Add(s);
+                }
+
+                specificSystem.outputParams(dataGridView1);
+
             }
         }
 
@@ -77,9 +77,10 @@ namespace courseWork
             bool status = true;
             try
             {
-                m_a = Convert.ToDouble(AtextBox.Text.Replace(".", ","));
-                m_b = Convert.ToDouble(BtextBox.Text.Replace(".", ","));
-                m_n = Convert.ToInt32(NtextBox.Text.Replace(".", ","));
+                m_lyabmbda = Convert.ToDouble(lyambdaTextBox.Text.Replace(".", ","));
+                m_mu = Convert.ToDouble(mutextBox.Text.Replace(".", ","));
+                m_maxTime = Convert.ToInt32(maxTimeTextBox.Text.Replace(".", ","));
+                m_queueLength = Convert.ToInt32(queueLengthtextBox.Text.Replace(".", ","));
             }
             catch 
             {
