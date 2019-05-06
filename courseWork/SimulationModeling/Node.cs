@@ -7,15 +7,21 @@ namespace courseWork.SimulationModeling
         double m_time;
         int m_transitions;
         string m_name;
+        int m_number;
 
-        public Node()
+        public int Number => m_number;
+
+        public Node(int number)
         {
             //начальная вероятнсть
             Probabilities.Add(0);
+
+            //установить номер узла
+            m_number = number;
         }
 
-        public Node(string name)
-            :this()
+        public Node(string name, int number)
+            :this(number)
         {
             m_name = name;
         }

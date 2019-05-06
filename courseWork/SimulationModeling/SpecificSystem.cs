@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using TheoreticalProbabilitiesNS;
 
 namespace courseWork.SimulationModeling
 {
@@ -31,13 +32,13 @@ namespace courseWork.SimulationModeling
             base.m_nodes = new Node[m_m + 2];
 
             for (int i = 0; i < m_nodes.Length; i++)
-                m_nodes[i] = new Node("node" + i);
+                m_nodes[i] = new Node("node" + i, i);    //передается и номер узла для понимания перемещений в графе
 
             for (int i = 0; i < m_nodes.Length; i++)
             {
                 List<NodeIntensityObject> children = new List<NodeIntensityObject>();
 
-                //if (i + 1 <= m_nodes.Length - 1)
+
                 if(i == m_nodes.Length-1)
                     children.Add(new NodeIntensityObject(null, m_λ));
 
@@ -64,48 +65,66 @@ namespace courseWork.SimulationModeling
             double pFailure, q, A, r, w, k, t_waiting, t_processing, t_AverageInSystem;
             GetTheoreticalStatistics(out pFailure, out q, out A, out r, out w, out k, out t_waiting, out t_processing, out t_AverageInSystem);
 
-            dataGridView.Rows.Add("Ймовірність відмови обслуговування", pFailure.ToString("0.0000"));
-            dataGridView.Rows.Add("Відносна пропускна властивість", q.ToString("0.0000"));
-            dataGridView.Rows.Add("Абсолютна пропускна властивість", A.ToString("0.0000"));
-            dataGridView.Rows.Add("Середня кількість вимог, що знаходиться в черзі", r.ToString("0.0000"));
-            dataGridView.Rows.Add("Середня кількість вимог, що обслуговуються системою", w.ToString("0.0000"));
-            dataGridView.Rows.Add("Середня кількість вимог, що знаходиться в системі ", k.ToString("0.0000"));
-            dataGridView.Rows.Add("Середній час очікування в черзі", t_waiting.ToString("0.0000"));
-            dataGridView.Rows.Add("Середній час обслуговування однієї вимоги", t_processing.ToString("0.0000"));
-            dataGridView.Rows.Add("Середній час перебування вимоги в СМО", t_AverageInSystem.ToString("0.0000"));
+            double pFailure_stat, q_stat, A_stat, r_stat, w_stat, k_stat, t_waiting_stat, t_processing_stat, t_AverageInSystem_stat;
+            GetStatisticaltatistics(out pFailure_stat, out q_stat, out A_stat, out r_stat, out w_stat, out k_stat, out t_waiting_stat, out t_processing_stat, out t_AverageInSystem_stat);
+
+            dataGridView.Rows.Add("Ймовірність відмови обслуговування"                 , pFailure         .ToString("0.0000"), pFailure_stat         .ToString("0.0000"));
+            dataGridView.Rows.Add("Відносна пропускна властивість"                     , q                .ToString("0.0000"), q_stat                .ToString("0.0000"));
+            dataGridView.Rows.Add("Абсолютна пропускна властивість"                    , A                .ToString("0.0000"), A_stat                .ToString("0.0000"));
+            dataGridView.Rows.Add("Середня кількість вимог, що знаходиться в черзі"    , r                .ToString("0.0000"), r_stat                .ToString("0.0000"));
+            dataGridView.Rows.Add("Середня кількість вимог, що обслуговуються системою", w                .ToString("0.0000"), w_stat                .ToString("0.0000"));
+            dataGridView.Rows.Add("Середня кількість вимог, що знаходиться в системі " , k                .ToString("0.0000"), k_stat                .ToString("0.0000"));
+            dataGridView.Rows.Add("Середній час очікування в черзі"                    , t_waiting        .ToString("0.0000"), t_waiting_stat        .ToString("0.0000"));
+            dataGridView.Rows.Add("Середній час обслуговування однієї вимоги"          , t_processing     .ToString("0.0000"), t_processing_stat     .ToString("0.0000"));
+            dataGridView.Rows.Add("Середній час перебування вимоги в СМО"              , t_AverageInSystem.ToString("0.0000"), t_AverageInSystem_stat.ToString("0.0000"));
         }
 
         private void GetTheoreticalStatistics(out double pFailure, out double q, out double A, out double r, out double w, out double k, out double t_waiting, out double t_processing, out double t_AverageInSystem)
         {
-            // приведенная интенсивность
-            double ro = m_λ / m_μ;
+            TheoreticalProbabilities statistics = new TheoreticalProbabilities();
+            statistics.Calc(m_λ, m_μ, m_m, 1);
 
             //вероятность отказа
-            pFailure = (Math.Pow(ro, m_m + 1) * (1 - ro)) / (1 - Math.Pow(ro, m_m + 2));
+            pFailure = statistics.P_c[1 + m_m];
 
             //относительная пропускная возможность
-            q = 1 - pFailure;
+            q = statistics.m_q;
 
             //абсолютная пропусная возможность
             A = m_λ * q;
 
-            //среднее количество требований в системе
-            r = (ro * ro * (1 - Math.Pow(ro, m_m)) * (m_m + 1 - m_m * ro)) / ((1 - Math.Pow(ro, m_m + 2)) * (1 - ro));
+            //среднее количество в очереди
+            r = statistics.m_r;
 
             //среднее количество требований, которые обслуживаются системой
-            w = (ro + Math.Pow(ro, m_m + 2)) / (1 - Math.Pow(ro, m_m + 2));
+            w = statistics.m_z; 
 
             //среднее количество требований в системе
-            k = w + r;
+            k = statistics.m_k;
 
             //среднее время ожидания в очереди
-            t_waiting = r / m_λ;
+            t_waiting = statistics.m_t_waiting;
 
             //среднее время обслуживая одного требования
             t_processing = 1 / m_μ;
 
             //среднее время пребывания требования в СМО
-            t_AverageInSystem = r / m_λ + q / m_μ;
+            t_AverageInSystem = statistics.m_t_system;
+        }
+
+        private void GetStatisticaltatistics(out double pFailure_stat, out double q_stat, out double a_stat, out double r_stat, out double w_stat, out double k_stat, out double t_waiting_stat, out double t_processing_stat, out double t_AverageInSystem_stat)
+        {
+            List<double> lastNodeProbabilities = Probabilities[m_nodes.Length - 1];
+
+                   pFailure_stat= lastNodeProbabilities[lastNodeProbabilities.Count-1]; 
+                          q_stat=0; 
+                          a_stat=0; 
+                          r_stat=0; 
+                          w_stat=0; 
+                          k_stat=0; 
+                  t_waiting_stat=0; 
+               t_processing_stat=0;
+            t_AverageInSystem_stat = 0;
         }
     }
 }
