@@ -78,13 +78,13 @@ namespace courseWork.SimulationModeling
             var orderedChildren = children.OrderBy(ch => ch.Interval).ToArray();
 
             NodeIntensityObject nextObject = null;
-            if (orderedChildren[0].Node == null)
+            if (orderedChildren[0].Node == null)    //отказ
             {
                 nextObject = orderedChildren[1];
                 m_failuresCounter++;
             }
             else
-                nextObject = orderedChildren[0];
+                nextObject = orderedChildren[0];    //переход
 
             double interval = nextObject.Interval;
             m_currentNode.AddTime(interval);
