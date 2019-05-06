@@ -71,7 +71,7 @@ namespace courseWork.SimulationModeling
             dataGridView.Rows.Add("Ймовірність відмови обслуговування"                 , pFailure         .ToString("0.0000"), pFailure_stat         .ToString("0.0000"));
             dataGridView.Rows.Add("Відносна пропускна властивість"                     , q                .ToString("0.0000"), q_stat                .ToString("0.0000"));
             dataGridView.Rows.Add("Абсолютна пропускна властивість"                    , A                .ToString("0.0000"), A_stat                .ToString("0.0000"));
-            dataGridView.Rows.Add("Середня кількість вимог, що знаходиться в черзі"    , r                .ToString("0.0000"), r_stat                .ToString("0.0000"));
+            dataGridView.Rows.Add("Середня кількість вимог, що знаходиться в черзі"    , r                .ToString("0.0000"), r_stat                .ToString("0.0000") + " - " + m_queueLength.Average().ToString("0.0000"));
             dataGridView.Rows.Add("Середня кількість вимог, що обслуговуються системою", w                .ToString("0.0000"), w_stat                .ToString("0.0000"));
             dataGridView.Rows.Add("Середня кількість вимог, що знаходиться в системі " , k                .ToString("0.0000"), k_stat                .ToString("0.0000"));
             dataGridView.Rows.Add("Середній час очікування в черзі"                    , t_waiting        .ToString("0.0000"), t_waiting_stat        .ToString("0.0000"));
@@ -114,16 +114,31 @@ namespace courseWork.SimulationModeling
 
         private void GetStatisticaltatistics(out double pFailure_stat, out double q_stat, out double a_stat, out double r_stat, out double w_stat, out double k_stat, out double t_waiting_stat, out double t_processing_stat, out double t_AverageInSystem_stat)
         {
+            int lastProbabilityIndex = Probabilities[0].Count-1;
+
             List<double> lastNodeProbabilities = Probabilities[m_nodes.Length - 1];
 
-                   pFailure_stat= lastNodeProbabilities[lastNodeProbabilities.Count-1]; 
-                          q_stat=0; 
-                          a_stat=0; 
-                          r_stat=0; 
-                          w_stat=0; 
-                          k_stat=0; 
-                  t_waiting_stat=0; 
-               t_processing_stat=0;
+
+            pFailure_stat = lastNodeProbabilities[lastProbabilityIndex];
+            a_stat  = ProcessedCounter / base.m_time;
+            q_stat = a_stat/m_λ;
+
+            r_stat =0;
+
+            for (int i = 1; i <= m_m; i++)
+                r_stat += i * Probabilities[i+1][lastProbabilityIndex];
+
+
+            w_stat =1 - Probabilities[0][lastProbabilityIndex];
+
+            k_stat =0;
+
+            for (int i = 1; i <= m_m+1; i++)
+                k_stat += i * Probabilities[i][lastProbabilityIndex];
+
+
+            t_waiting_stat =0; 
+            t_processing_stat =0;
             t_AverageInSystem_stat = 0;
         }
     }

@@ -29,6 +29,9 @@ namespace courseWork.SimulationModeling
         int m_failuresCounter;
         public int FailuresCounter => m_failuresCounter; //счетчик отказов
 
+        int m_processedCounter;
+        public int ProcessedCounter=>m_processedCounter;
+
         protected Node m_currentNode;
 
         Random r = new Random();
@@ -55,8 +58,15 @@ namespace courseWork.SimulationModeling
             while (t < tLimit)
                 TransferToNextNode(ref t);
 
+            m_time = t;
+
             System.Diagnostics.Debug.WriteLine("Failures: " + m_failuresCounter);
+            System.Diagnostics.Debug.WriteLine("Processed: " + m_processedCounter);
         }
+
+        protected double m_time;
+
+        protected List<int> m_queueLength = new List<int>();
 
         private void TransferToNextNode(ref double t)
         {
@@ -79,7 +89,7 @@ namespace courseWork.SimulationModeling
             double interval = nextObject.Interval;
             m_currentNode.AddTime(interval);
 
-            System.Diagnostics.Debug.WriteLine("time: " + m_currentNode.Time);
+            //System.Diagnostics.Debug.WriteLine("time: " + m_currentNode.Time);
 
             t += interval;
             timeList.Add(t);
@@ -99,9 +109,19 @@ namespace courseWork.SimulationModeling
 
         void SetNextNode(Node nextNode)
         {
+            //запомнить кол-во в очереди
+            if (m_currentNode.Number > 1)
+                m_queueLength.Add(m_currentNode.Number - 1);
+            else
+                m_queueLength.Add(0);
+
+            //счетчик обработанных
+            if (nextNode.Number < m_currentNode.Number)
+                m_processedCounter++;
+
             nextNode.Transfer();
             m_currentNode = nextNode;
-            System.Diagnostics.Debug.WriteLine(m_currentNode);
+            //System.Diagnostics.Debug.WriteLine(m_currentNode);
         }
 
         public List<List<double>> Probabilities => m_nodes.Select(n=>n.Probabilities).ToList();
