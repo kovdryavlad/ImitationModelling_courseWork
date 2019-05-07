@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 using TheoreticalProbabilitiesNS;
 
 namespace courseWork.SimulationModeling
@@ -58,7 +59,36 @@ namespace courseWork.SimulationModeling
         }
 
 
-        internal void outputParams(DataGridView dataGridView)
+        internal void outputParams(DataGridView dataGridView, DataGridView probabilitiesDataGrid, TextBox logTextBox)
+        {
+            CalsStatistics(dataGridView);
+
+            OutPutProbabilities(probabilitiesDataGrid);
+
+            FillLog(logTextBox);
+        }
+
+        private void FillLog(TextBox logTextBox)
+        {
+            logTextBox.Text = "";
+
+            logTextBox.Text += "Кількість відмов: " + FailuresCounter+Environment.NewLine;
+            logTextBox.Text += "Кількість опрацьованих вимог: " + ProcessedCounter;
+        }
+
+        private void OutPutProbabilities(DataGridView probabilitiesDataGrid)
+        {
+            probabilitiesDataGrid.Rows.Clear();
+
+            int lastProbabilityIndex = Probabilities[0].Count-1;
+
+            for (int i = 0; i < m_nodes.Length; i++)
+                probabilitiesDataGrid.Rows.Add("p" + i, 
+                    probabilitiesTheoretical[i].ToString("0.0000"), 
+                    Probabilities[i][lastProbabilityIndex].ToString("0.0000"));
+        }
+
+        private void CalsStatistics(DataGridView dataGridView)
         {
             dataGridView.Rows.Clear();
 
@@ -68,21 +98,35 @@ namespace courseWork.SimulationModeling
             double pFailure_stat, q_stat, A_stat, r_stat, w_stat, k_stat, t_waiting_stat, t_processing_stat, t_AverageInSystem_stat;
             GetStatisticaltatistics(out pFailure_stat, out q_stat, out A_stat, out r_stat, out w_stat, out k_stat, out t_waiting_stat, out t_processing_stat, out t_AverageInSystem_stat);
 
-            dataGridView.Rows.Add("Ймовірність відмови обслуговування"                 , pFailure         .ToString("0.0000"), pFailure_stat         .ToString("0.0000"));
-            dataGridView.Rows.Add("Відносна пропускна властивість"                     , q                .ToString("0.0000"), q_stat                .ToString("0.0000"));
-            dataGridView.Rows.Add("Абсолютна пропускна властивість"                    , A                .ToString("0.0000"), A_stat                .ToString("0.0000"));
-            dataGridView.Rows.Add("Середня кількість вимог, що знаходиться в черзі"    , r                .ToString("0.0000"), r_stat                .ToString("0.0000") + " - " + m_queueLength.Average().ToString("0.0000"));
-            dataGridView.Rows.Add("Середня кількість вимог, що обслуговуються системою", w                .ToString("0.0000"), w_stat                .ToString("0.0000"));
-            dataGridView.Rows.Add("Середня кількість вимог, що знаходиться в системі " , k                .ToString("0.0000"), k_stat                .ToString("0.0000"));
-            dataGridView.Rows.Add("Середній час очікування в черзі"                    , t_waiting        .ToString("0.0000"), t_waiting_stat        .ToString("0.0000"));
-            dataGridView.Rows.Add("Середній час обслуговування однієї вимоги"          , t_processing     .ToString("0.0000"), t_processing_stat     .ToString("0.0000"));
-            dataGridView.Rows.Add("Середній час перебування вимоги в СМО"              , t_AverageInSystem.ToString("0.0000"), t_AverageInSystem_stat.ToString("0.0000"));
+            dataGridView.Rows.Add("Ймовірність відмови обслуговування", pFailure.ToString("0.0000"), pFailure_stat.ToString("0.0000"));
+            dataGridView.Rows.Add("Відносна пропускна властивість", q.ToString("0.0000"), q_stat.ToString("0.0000"));
+            dataGridView.Rows.Add("Абсолютна пропускна властивість", A.ToString("0.0000"), A_stat.ToString("0.0000"));
+            dataGridView.Rows.Add("Середня кількість вимог, що знаходиться в черзі", r.ToString("0.0000"), r_stat.ToString("0.0000"));
+            dataGridView.Rows.Add("Середня кількість вимог, що обслуговуються системою", w.ToString("0.0000"), w_stat.ToString("0.0000"));
+            dataGridView.Rows.Add("Середня кількість вимог, що знаходиться в системі ", k.ToString("0.0000"), k_stat.ToString("0.0000"));
+            //dataGridView.Rows.Add("Середній час очікування в черзі", t_waiting.ToString("0.0000"), t_waiting_stat.ToString("0.0000"));
+            //dataGridView.Rows.Add("Середній час обслуговування однієї вимоги", t_processing.ToString("0.0000"), t_processing_stat.ToString("0.0000"));
+            //dataGridView.Rows.Add("Середній час перебування вимоги в СМО", t_AverageInSystem.ToString("0.0000"), t_AverageInSystem_stat.ToString("0.0000"));
         }
+
+        internal void outputFailuredSeries(SeriesCollection series)
+        {
+            series[0].Points.Clear();
+            series[0].Points.DataBindXY(processedDict.Keys, processedDict.Values);
+
+            series[1].Points.Clear();
+            series[1].Points.DataBindXY(failuredDict.Keys, failuredDict.Values);
+
+        }
+
+        double[] probabilitiesTheoretical;
 
         private void GetTheoreticalStatistics(out double pFailure, out double q, out double A, out double r, out double w, out double k, out double t_waiting, out double t_processing, out double t_AverageInSystem)
         {
             TheoreticalProbabilities statistics = new TheoreticalProbabilities();
+
             statistics.Calc(m_λ, m_μ, m_m, 1);
+            probabilitiesTheoretical = statistics.P_c;
 
             //вероятность отказа
             pFailure = statistics.P_c[1 + m_m];
@@ -137,9 +181,17 @@ namespace courseWork.SimulationModeling
                 k_stat += i * Probabilities[i][lastProbabilityIndex];
 
 
-            t_waiting_stat =0; 
-            t_processing_stat =0;
-            t_AverageInSystem_stat = 0;
+            t_waiting_stat = m_processedQueries
+                                .Select(el=>el.StartProcessingTime - el.IncomeTime)
+                                .Average();
+            
+            t_processing_stat = m_processedQueries
+                                .Select(el => el.EndProcessingTime - el.StartProcessingTime)
+                                .Average();
+
+            t_AverageInSystem_stat = m_processedQueries
+                                .Select(el => el.EndProcessingTime - el.IncomeTime)
+                                .Average(); ;
         }
     }
 }

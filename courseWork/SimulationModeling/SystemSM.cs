@@ -47,28 +47,31 @@ namespace courseWork.SimulationModeling
             m_currentNode = node;
         }
 
+        protected Query m_currentQuery;
+        protected List<Query> m_processedQueries = new List<Query>();
+        protected List<Query> m_Queue = new List<Query>();
+
         //первое т всегда равно 0
         public List<double> timeList = new List<double>();
+
+        protected Dictionary<double, double> failuredDict = new Dictionary<double, double>();
+        protected Dictionary<double, double> processedDict = new Dictionary<double, double>();
 
         public virtual void Model(double tLimit)
         {
             System.Diagnostics.Debug.WriteLine(m_currentNode);
 
-            double t = 0;
-            while (t < tLimit)
-                TransferToNextNode(ref t);
+            while (m_time < tLimit)
+                TransferToNextNode();
 
-            m_time = t;
-
+            
             System.Diagnostics.Debug.WriteLine("Failures: " + m_failuresCounter);
             System.Diagnostics.Debug.WriteLine("Processed: " + m_processedCounter);
         }
 
         protected double m_time;
 
-        protected List<int> m_queueLength = new List<int>();
-
-        private void TransferToNextNode(ref double t)
+        private void TransferToNextNode()
         {
             NodeIntensityObject[] children = m_currentNode.Children;
 
@@ -82,6 +85,8 @@ namespace courseWork.SimulationModeling
             {
                 nextObject = orderedChildren[1];
                 m_failuresCounter++;
+
+                failuredDict.Add(m_time, m_failuresCounter);
             }
             else
                 nextObject = orderedChildren[0];    //переход
@@ -91,14 +96,14 @@ namespace courseWork.SimulationModeling
 
             //System.Diagnostics.Debug.WriteLine("time: " + m_currentNode.Time);
 
-            t += interval;
-            timeList.Add(t);
+            m_time += interval;
+            timeList.Add(m_time);
 
             //переходим к следующему элементу
-            SetNextNode(nextObject.Node);
+            SetNextNode(nextObject.Node, interval);
 
             //подсчет вероятностей
-            CalcStatistics(t);
+            CalcStatistics(m_time);
         }
 
         private void CalcStatistics(double t)
@@ -107,21 +112,56 @@ namespace courseWork.SimulationModeling
                 node.AddProbability(t);
         }
 
-        void SetNextNode(Node nextNode)
+        void SetNextNode(Node nextNode, double interval)
         {
-            //запомнить кол-во в очереди
-            if (m_currentNode.Number > 1)
-                m_queueLength.Add(m_currentNode.Number - 1);
+            //куда произошло перемещение
+            if (nextNode.Number > m_currentNode.Number)
+                MoveRight(nextNode, interval);
             else
-                m_queueLength.Add(0);
+                MoveLeft(nextNode, interval);
+
 
             //счетчик обработанных
             if (nextNode.Number < m_currentNode.Number)
+            {
                 m_processedCounter++;
+
+                processedDict.Add(m_time, m_processedCounter);
+            }
 
             nextNode.Transfer();
             m_currentNode = nextNode;
             //System.Diagnostics.Debug.WriteLine(m_currentNode);
+        }
+
+        private void MoveLeft(Node nextNode, double interval)
+        {
+            m_currentQuery.EndProcessingTime = m_time + interval;
+            m_processedQueries.Add(m_currentQuery);
+
+            if (m_currentNode.Number == 1)
+                m_currentQuery = null;
+
+            else
+            {
+                //вытягиваем первый из очереди
+                m_currentQuery = m_Queue[0];
+                m_Queue.RemoveAt(0);
+
+                m_currentQuery.StartProcessingTime = m_time + interval;
+            }
+            
+        }
+
+        private void MoveRight(Node nextNode, double interval)
+        {
+            if (m_currentNode.Number == 0)
+            {
+                m_currentQuery = new Query(m_time + interval);
+                m_currentQuery.StartProcessingTime = m_currentQuery.IncomeTime;
+            }
+            else
+                m_Queue.Add(new Query(m_time + interval));
         }
 
         public List<List<double>> Probabilities => m_nodes.Select(n=>n.Probabilities).ToList();

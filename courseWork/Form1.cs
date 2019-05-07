@@ -35,6 +35,9 @@ namespace courseWork
             chart1.ChartAreas[0].AxisX.LabelStyle.Format = "{0:0.0}";
             chart1.ChartAreas[0].AxisY.LabelStyle.Format = "{0:0.00}";
 
+            FailuresChart.ChartAreas[0].AxisX.LabelStyle.Format = "{0:0.0}";
+            FailuresChart.ChartAreas[0].AxisY.LabelStyle.Format = "{0:0.00}";
+
             chart1.ChartAreas[0].AxisY.Maximum = 1;
             chart1.ChartAreas[0].AxisY.Minimum = 0;
         }
@@ -67,8 +70,8 @@ namespace courseWork
                     chart1.Series.Add(s);
                 }
 
-                specificSystem.outputParams(dataGridView1);
-
+                specificSystem.outputParams(dataGridView1, ProbabilitieDataGridView, LogTextBox);
+                specificSystem.outputFailuredSeries(FailuresChart.Series);
             }
         }
 
