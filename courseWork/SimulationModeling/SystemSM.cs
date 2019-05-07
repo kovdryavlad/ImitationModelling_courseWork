@@ -54,6 +54,9 @@ namespace courseWork.SimulationModeling
         //первое т всегда равно 0
         public List<double> timeList = new List<double>();
 
+        protected Dictionary<double, double> failuredDict = new Dictionary<double, double>();
+        protected Dictionary<double, double> processedDict = new Dictionary<double, double>();
+
         public virtual void Model(double tLimit)
         {
             System.Diagnostics.Debug.WriteLine(m_currentNode);
@@ -82,6 +85,8 @@ namespace courseWork.SimulationModeling
             {
                 nextObject = orderedChildren[1];
                 m_failuresCounter++;
+
+                failuredDict.Add(m_time, m_failuresCounter);
             }
             else
                 nextObject = orderedChildren[0];    //переход
@@ -118,7 +123,11 @@ namespace courseWork.SimulationModeling
 
             //счетчик обработанных
             if (nextNode.Number < m_currentNode.Number)
+            {
                 m_processedCounter++;
+
+                processedDict.Add(m_time, m_processedCounter);
+            }
 
             nextNode.Transfer();
             m_currentNode = nextNode;

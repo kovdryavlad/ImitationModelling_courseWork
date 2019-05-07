@@ -61,7 +61,7 @@
             this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.chart2 = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.FailuresChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -72,7 +72,7 @@
             this.tabPage5.SuspendLayout();
             this.tabPage6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ProbabilitieDataGridView)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chart2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.FailuresChart)).BeginInit();
             this.SuspendLayout();
             // 
             // chart1
@@ -200,7 +200,7 @@
             // 
             // tabPage3
             // 
-            this.tabPage3.Controls.Add(this.chart2);
+            this.tabPage3.Controls.Add(this.FailuresChart);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
@@ -315,15 +315,15 @@
             this.Column4.HeaderText = "Статистична ймовірність";
             this.Column4.Name = "Column4";
             // 
-            // chart2
+            // FailuresChart
             // 
             chartArea2.Name = "ChartArea1";
-            this.chart2.ChartAreas.Add(chartArea2);
-            this.chart2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.FailuresChart.ChartAreas.Add(chartArea2);
+            this.FailuresChart.Dock = System.Windows.Forms.DockStyle.Fill;
             legend2.Name = "Legend1";
-            this.chart2.Legends.Add(legend2);
-            this.chart2.Location = new System.Drawing.Point(3, 3);
-            this.chart2.Name = "chart2";
+            this.FailuresChart.Legends.Add(legend2);
+            this.FailuresChart.Location = new System.Drawing.Point(3, 3);
+            this.FailuresChart.Name = "FailuresChart";
             series1.ChartArea = "ChartArea1";
             series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
             series1.Legend = "Legend1";
@@ -333,11 +333,11 @@
             series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
             series2.Legend = "Legend1";
             series2.Name = "Відмови";
-            this.chart2.Series.Add(series1);
-            this.chart2.Series.Add(series2);
-            this.chart2.Size = new System.Drawing.Size(632, 288);
-            this.chart2.TabIndex = 0;
-            this.chart2.Text = "chart2";
+            this.FailuresChart.Series.Add(series1);
+            this.FailuresChart.Series.Add(series2);
+            this.FailuresChart.Size = new System.Drawing.Size(632, 288);
+            this.FailuresChart.TabIndex = 0;
+            this.FailuresChart.Text = "chart2";
             // 
             // Form1
             // 
@@ -369,7 +369,7 @@
             this.tabPage6.ResumeLayout(false);
             this.tabPage6.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ProbabilitieDataGridView)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chart2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.FailuresChart)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -404,7 +404,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
         private System.Windows.Forms.TabPage tabPage6;
         private System.Windows.Forms.TextBox LogTextBox;
-        private System.Windows.Forms.DataVisualization.Charting.Chart chart2;
+        private System.Windows.Forms.DataVisualization.Charting.Chart FailuresChart;
     }
 }
 

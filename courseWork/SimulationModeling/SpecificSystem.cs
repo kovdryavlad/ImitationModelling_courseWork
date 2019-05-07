@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 using TheoreticalProbabilitiesNS;
 
 namespace courseWork.SimulationModeling
@@ -106,6 +107,16 @@ namespace courseWork.SimulationModeling
             dataGridView.Rows.Add("Середній час очікування в черзі", t_waiting.ToString("0.0000"), t_waiting_stat.ToString("0.0000"));
             dataGridView.Rows.Add("Середній час обслуговування однієї вимоги", t_processing.ToString("0.0000"), t_processing_stat.ToString("0.0000"));
             dataGridView.Rows.Add("Середній час перебування вимоги в СМО", t_AverageInSystem.ToString("0.0000"), t_AverageInSystem_stat.ToString("0.0000"));
+        }
+
+        internal void outputFailuredSeries(SeriesCollection series)
+        {
+            series[0].Points.Clear();
+            series[0].Points.DataBindXY(processedDict.Keys, processedDict.Values);
+
+            series[1].Points.Clear();
+            series[1].Points.DataBindXY(failuredDict.Keys, failuredDict.Values);
+
         }
 
         double[] probabilitiesTheoretical;
