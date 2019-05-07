@@ -67,7 +67,7 @@ namespace courseWork
                     chart1.Series.Add(s);
                 }
 
-                specificSystem.outputParams(dataGridView1);
+                specificSystem.outputParams(dataGridView1, ProbabilitieDataGridView, LogTextBox);
 
             }
         }
