@@ -71,7 +71,7 @@ namespace courseWork.SimulationModeling
             dataGridView.Rows.Add("Ймовірність відмови обслуговування"                 , pFailure         .ToString("0.0000"), pFailure_stat         .ToString("0.0000"));
             dataGridView.Rows.Add("Відносна пропускна властивість"                     , q                .ToString("0.0000"), q_stat                .ToString("0.0000"));
             dataGridView.Rows.Add("Абсолютна пропускна властивість"                    , A                .ToString("0.0000"), A_stat                .ToString("0.0000"));
-            dataGridView.Rows.Add("Середня кількість вимог, що знаходиться в черзі"    , r                .ToString("0.0000"), r_stat                .ToString("0.0000") + " - " + m_queueLength.Average().ToString("0.0000"));
+            dataGridView.Rows.Add("Середня кількість вимог, що знаходиться в черзі"    , r                .ToString("0.0000"), r_stat                .ToString("0.0000"));
             dataGridView.Rows.Add("Середня кількість вимог, що обслуговуються системою", w                .ToString("0.0000"), w_stat                .ToString("0.0000"));
             dataGridView.Rows.Add("Середня кількість вимог, що знаходиться в системі " , k                .ToString("0.0000"), k_stat                .ToString("0.0000"));
             dataGridView.Rows.Add("Середній час очікування в черзі"                    , t_waiting        .ToString("0.0000"), t_waiting_stat        .ToString("0.0000"));
@@ -137,9 +137,17 @@ namespace courseWork.SimulationModeling
                 k_stat += i * Probabilities[i][lastProbabilityIndex];
 
 
-            t_waiting_stat =0; 
-            t_processing_stat =0;
-            t_AverageInSystem_stat = 0;
+            t_waiting_stat = m_processedQueries
+                                .Select(el=>el.StartProcessingTime - el.IncomeTime)
+                                .Average();
+            
+            t_processing_stat = m_processedQueries
+                                .Select(el => el.EndProcessingTime - el.StartProcessingTime)
+                                .Average();
+
+            t_AverageInSystem_stat = m_processedQueries
+                                .Select(el => el.EndProcessingTime - el.IncomeTime)
+                                .Average(); ;
         }
     }
 }
