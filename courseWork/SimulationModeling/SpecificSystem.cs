@@ -104,9 +104,9 @@ namespace courseWork.SimulationModeling
             dataGridView.Rows.Add("Середня кількість вимог, що знаходиться в черзі", r.ToString("0.0000"), r_stat.ToString("0.0000"));
             dataGridView.Rows.Add("Середня кількість вимог, що обслуговуються системою", w.ToString("0.0000"), w_stat.ToString("0.0000"));
             dataGridView.Rows.Add("Середня кількість вимог, що знаходиться в системі ", k.ToString("0.0000"), k_stat.ToString("0.0000"));
-            dataGridView.Rows.Add("Середній час очікування в черзі", t_waiting.ToString("0.0000"), t_waiting_stat.ToString("0.0000"));
-            dataGridView.Rows.Add("Середній час обслуговування однієї вимоги", t_processing.ToString("0.0000"), t_processing_stat.ToString("0.0000"));
-            dataGridView.Rows.Add("Середній час перебування вимоги в СМО", t_AverageInSystem.ToString("0.0000"), t_AverageInSystem_stat.ToString("0.0000"));
+            //dataGridView.Rows.Add("Середній час очікування в черзі", t_waiting.ToString("0.0000"), t_waiting_stat.ToString("0.0000"));
+            //dataGridView.Rows.Add("Середній час обслуговування однієї вимоги", t_processing.ToString("0.0000"), t_processing_stat.ToString("0.0000"));
+            //dataGridView.Rows.Add("Середній час перебування вимоги в СМО", t_AverageInSystem.ToString("0.0000"), t_AverageInSystem_stat.ToString("0.0000"));
         }
 
         internal void outputFailuredSeries(SeriesCollection series)
