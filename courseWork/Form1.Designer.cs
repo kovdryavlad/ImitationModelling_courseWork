@@ -48,6 +48,7 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.FailuresChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.Параметр = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -55,24 +56,25 @@
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.tabPage5 = new System.Windows.Forms.TabPage();
-            this.tabPage6 = new System.Windows.Forms.TabPage();
-            this.LogTextBox = new System.Windows.Forms.TextBox();
             this.ProbabilitieDataGridView = new System.Windows.Forms.DataGridView();
             this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FailuresChart = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.LogTextBox = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.FailuresChart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.tabControl2.SuspendLayout();
             this.tabPage4.SuspendLayout();
             this.tabPage5.SuspendLayout();
-            this.tabPage6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ProbabilitieDataGridView)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.FailuresChart)).BeginInit();
+            this.tabPage6.SuspendLayout();
             this.SuspendLayout();
             // 
             // chart1
@@ -86,7 +88,7 @@
             this.chart1.Legends.Add(legend1);
             this.chart1.Location = new System.Drawing.Point(3, 3);
             this.chart1.Name = "chart1";
-            this.chart1.Size = new System.Drawing.Size(632, 288);
+            this.chart1.Size = new System.Drawing.Size(632, 281);
             this.chart1.TabIndex = 0;
             this.chart1.Text = "chart1";
             // 
@@ -127,7 +129,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(222, 24);
+            this.label3.Location = new System.Drawing.Point(223, 50);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(85, 13);
             this.label3.TabIndex = 1;
@@ -135,11 +137,11 @@
             // 
             // queueLengthtextBox
             // 
-            this.queueLengthtextBox.Location = new System.Drawing.Point(310, 21);
+            this.queueLengthtextBox.Location = new System.Drawing.Point(319, 47);
             this.queueLengthtextBox.Name = "queueLengthtextBox";
             this.queueLengthtextBox.Size = new System.Drawing.Size(72, 20);
             this.queueLengthtextBox.TabIndex = 2;
-            this.queueLengthtextBox.Text = "2";
+            this.queueLengthtextBox.Text = "4";
             // 
             // button1
             // 
@@ -181,10 +183,10 @@
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage3);
-            this.tabControl1.Location = new System.Drawing.Point(27, 66);
+            this.tabControl1.Location = new System.Drawing.Point(27, 73);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(646, 320);
+            this.tabControl1.Size = new System.Drawing.Size(646, 313);
             this.tabControl1.TabIndex = 4;
             // 
             // tabPage1
@@ -193,7 +195,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(638, 294);
+            this.tabPage1.Size = new System.Drawing.Size(638, 287);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Ймовірності станів";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -208,6 +210,30 @@
             this.tabPage3.TabIndex = 1;
             this.tabPage3.Text = "Графік відмов";
             this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // FailuresChart
+            // 
+            chartArea2.Name = "ChartArea1";
+            this.FailuresChart.ChartAreas.Add(chartArea2);
+            this.FailuresChart.Dock = System.Windows.Forms.DockStyle.Fill;
+            legend2.Name = "Legend1";
+            this.FailuresChart.Legends.Add(legend2);
+            this.FailuresChart.Location = new System.Drawing.Point(3, 3);
+            this.FailuresChart.Name = "FailuresChart";
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series1.Legend = "Legend1";
+            series1.Name = "Опрацьовано";
+            series1.YValuesPerPoint = 2;
+            series2.ChartArea = "ChartArea1";
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series2.Legend = "Legend1";
+            series2.Name = "Відмови";
+            this.FailuresChart.Series.Add(series1);
+            this.FailuresChart.Series.Add(series2);
+            this.FailuresChart.Size = new System.Drawing.Size(632, 288);
+            this.FailuresChart.TabIndex = 0;
+            this.FailuresChart.Text = "chart2";
             // 
             // dataGridView1
             // 
@@ -269,25 +295,6 @@
             this.tabPage5.Text = "Ймовірності";
             this.tabPage5.UseVisualStyleBackColor = true;
             // 
-            // tabPage6
-            // 
-            this.tabPage6.Controls.Add(this.LogTextBox);
-            this.tabPage6.Location = new System.Drawing.Point(4, 22);
-            this.tabPage6.Name = "tabPage6";
-            this.tabPage6.Size = new System.Drawing.Size(649, 210);
-            this.tabPage6.TabIndex = 2;
-            this.tabPage6.Text = "Журнал";
-            this.tabPage6.UseVisualStyleBackColor = true;
-            // 
-            // LogTextBox
-            // 
-            this.LogTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.LogTextBox.Location = new System.Drawing.Point(0, 0);
-            this.LogTextBox.Multiline = true;
-            this.LogTextBox.Name = "LogTextBox";
-            this.LogTextBox.Size = new System.Drawing.Size(649, 210);
-            this.LogTextBox.TabIndex = 0;
-            // 
             // ProbabilitieDataGridView
             // 
             this.ProbabilitieDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -315,29 +322,41 @@
             this.Column4.HeaderText = "Статистична ймовірність";
             this.Column4.Name = "Column4";
             // 
-            // FailuresChart
+            // tabPage6
             // 
-            chartArea2.Name = "ChartArea1";
-            this.FailuresChart.ChartAreas.Add(chartArea2);
-            this.FailuresChart.Dock = System.Windows.Forms.DockStyle.Fill;
-            legend2.Name = "Legend1";
-            this.FailuresChart.Legends.Add(legend2);
-            this.FailuresChart.Location = new System.Drawing.Point(3, 3);
-            this.FailuresChart.Name = "FailuresChart";
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series1.Legend = "Legend1";
-            series1.Name = "Опрацьовано";
-            series1.YValuesPerPoint = 2;
-            series2.ChartArea = "ChartArea1";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series2.Legend = "Legend1";
-            series2.Name = "Відмови";
-            this.FailuresChart.Series.Add(series1);
-            this.FailuresChart.Series.Add(series2);
-            this.FailuresChart.Size = new System.Drawing.Size(632, 288);
-            this.FailuresChart.TabIndex = 0;
-            this.FailuresChart.Text = "chart2";
+            this.tabPage6.Controls.Add(this.LogTextBox);
+            this.tabPage6.Location = new System.Drawing.Point(4, 22);
+            this.tabPage6.Name = "tabPage6";
+            this.tabPage6.Size = new System.Drawing.Size(649, 210);
+            this.tabPage6.TabIndex = 2;
+            this.tabPage6.Text = "Журнал";
+            this.tabPage6.UseVisualStyleBackColor = true;
+            // 
+            // LogTextBox
+            // 
+            this.LogTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.LogTextBox.Location = new System.Drawing.Point(0, 0);
+            this.LogTextBox.Multiline = true;
+            this.LogTextBox.Name = "LogTextBox";
+            this.LogTextBox.Size = new System.Drawing.Size(649, 210);
+            this.LogTextBox.TabIndex = 0;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(223, 24);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(94, 13);
+            this.label5.TabIndex = 1;
+            this.label5.Text = "Кількість каналів";
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(319, 21);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(72, 20);
+            this.textBox1.TabIndex = 2;
+            this.textBox1.Text = "2";
             // 
             // Form1
             // 
@@ -348,8 +367,10 @@
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.maxTimeTextBox);
+            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.queueLengthtextBox);
             this.Controls.Add(this.label4);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.mutextBox);
             this.Controls.Add(this.label2);
@@ -362,14 +383,14 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.FailuresChart)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.tabControl2.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
             this.tabPage5.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.ProbabilitieDataGridView)).EndInit();
             this.tabPage6.ResumeLayout(false);
             this.tabPage6.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.ProbabilitieDataGridView)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.FailuresChart)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -405,6 +426,8 @@
         private System.Windows.Forms.TabPage tabPage6;
         private System.Windows.Forms.TextBox LogTextBox;
         private System.Windows.Forms.DataVisualization.Charting.Chart FailuresChart;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }
 

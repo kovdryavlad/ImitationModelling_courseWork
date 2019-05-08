@@ -73,7 +73,9 @@ namespace courseWork.SimulationModeling
             logTextBox.Text = "";
 
             logTextBox.Text += "Кількість відмов: " + FailuresCounter+Environment.NewLine;
-            logTextBox.Text += "Кількість опрацьованих вимог: " + ProcessedCounter;
+            logTextBox.Text += "Кількість опрацьованих вимог: " + ProcessedCounter + Environment.NewLine;
+            logTextBox.Text += "Час простою: " + m_nodes[0].Time.ToString("0.0000") + Environment.NewLine;
+            logTextBox.Text += "Час зайнятості: " + (m_time - m_nodes[0].Time).ToString("0.0000");
         }
 
         private void OutPutProbabilities(DataGridView probabilitiesDataGrid)
