@@ -14,12 +14,14 @@ namespace courseWork.SimulationModeling
         double m_λ;
         double m_μ;
         int m_m;
+        int m_channels;
 
-        public void SetProcessingParams(double lyambda, double mu, int m)
+        public void SetProcessingParams(double lyambda, double mu, int m, int channels)
         {
             m_λ = lyambda;
             m_μ = mu;
             m_m = m;
+            m_channels = channels;
         }
 
         public override void Model(double tLimit)
@@ -30,7 +32,7 @@ namespace courseWork.SimulationModeling
 
         private void Init()
         {
-            base.m_nodes = new Node[m_m + 2];
+            base.m_nodes = new Node[m_m+m_channels];
 
             for (int i = 0; i < m_nodes.Length; i++)
                 m_nodes[i] = new Node("node" + i, i);    //передается и номер узла для понимания перемещений в графе
@@ -127,11 +129,11 @@ namespace courseWork.SimulationModeling
         {
             TheoreticalProbabilities statistics = new TheoreticalProbabilities();
 
-            statistics.Calc(m_λ, m_μ, m_m, 1);
+            statistics.Calc(m_λ, m_μ, m_m, m_channels);
             probabilitiesTheoretical = statistics.P_c;
 
             //вероятность отказа
-            pFailure = statistics.P_c[1 + m_m];
+            pFailure = statistics.P_c[m_m+m_channels];
 
             //относительная пропускная возможность
             q = statistics.m_q;

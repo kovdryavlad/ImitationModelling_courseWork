@@ -63,7 +63,7 @@
             this.tabPage6 = new System.Windows.Forms.TabPage();
             this.LogTextBox = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.ChallelsLengthtextBox = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -350,13 +350,13 @@
             this.label5.TabIndex = 1;
             this.label5.Text = "Кількість каналів";
             // 
-            // textBox1
+            // ChallelsLengthtextBox
             // 
-            this.textBox1.Location = new System.Drawing.Point(319, 21);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(72, 20);
-            this.textBox1.TabIndex = 2;
-            this.textBox1.Text = "2";
+            this.ChallelsLengthtextBox.Location = new System.Drawing.Point(319, 21);
+            this.ChallelsLengthtextBox.Name = "ChallelsLengthtextBox";
+            this.ChallelsLengthtextBox.Size = new System.Drawing.Size(72, 20);
+            this.ChallelsLengthtextBox.TabIndex = 2;
+            this.ChallelsLengthtextBox.Text = "2";
             // 
             // Form1
             // 
@@ -367,7 +367,7 @@
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.maxTimeTextBox);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.ChallelsLengthtextBox);
             this.Controls.Add(this.queueLengthtextBox);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label5);
@@ -427,7 +427,7 @@
         private System.Windows.Forms.TextBox LogTextBox;
         private System.Windows.Forms.DataVisualization.Charting.Chart FailuresChart;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox ChallelsLengthtextBox;
     }
 }
 

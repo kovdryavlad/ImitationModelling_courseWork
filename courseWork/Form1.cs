@@ -46,6 +46,7 @@ namespace courseWork
         double m_mu;
         int m_maxTime;
         int m_queueLength;
+        int m_channelsLength;
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -55,7 +56,7 @@ namespace courseWork
             {
                 //имитационное моделирование
                 SpecificSystem specificSystem = new SpecificSystem();
-                specificSystem.SetProcessingParams(m_lyabmbda, m_mu, m_queueLength);                
+                specificSystem.SetProcessingParams(m_lyabmbda, m_mu, m_queueLength, m_channelsLength);                
                 specificSystem.Model(m_maxTime);
                 List<List<double>> imitationProbabilities = specificSystem.Probabilities;
 
@@ -84,6 +85,7 @@ namespace courseWork
                 m_mu = Convert.ToDouble(mutextBox.Text.Replace(".", ","));
                 m_maxTime = Convert.ToInt32(maxTimeTextBox.Text.Replace(".", ","));
                 m_queueLength = Convert.ToInt32(queueLengthtextBox.Text.Replace(".", ","));
+                m_channelsLength = Convert.ToInt32(ChallelsLengthtextBox.Text.Replace(".", ","));
             }
             catch 
             {
