@@ -23,6 +23,7 @@ namespace TheoreticalProbabilitiesNS
                 P_c[0] += Math.Pow(ro, i) / Factorial(i);
 
             P_c[0] += Math.Pow(ro, n) / Factorial(n) * (ro / n - Math.Pow(ro / n, m + 1)) / (1.0 - ro / n);
+
             P_c[0] = 1.0 / P_c[0];
 
             for (int i = 1; i <= n; i++)
@@ -43,10 +44,24 @@ namespace TheoreticalProbabilitiesNS
         private double Factorial(int v)
         {
             double res = 1;
-            for (int i = 2; i < v; i++)
-                i *= v;
+            for (int i = 2; i <= v; i++)
+                res *= i;
 
             return res;
+        }
+
+        void aA() {
+            double ro = Lambda / Mu,
+                p0 = Statistics["Ймов. стану 0"];
+
+            Statistics.Add("Сер. к-ть вимог що обслуговуються",
+                ro * (1d - Math.Pow(ro, ChannelsCount + QueueSize) * p0 / (Factorial(ChannelsCount) * Math.Pow(ChannelsCount, QueueSize))));
+            Statistics.Add("Сер. к-ть вимог в черзі",
+                Statistics["Ймов. стану " + (ChannelsCount + 1)] * (1d - (QueueSize + 1) * Math.Pow(ro / ChannelsCount, QueueSize) + QueueSize * Math.Pow(ro / ChannelsCount, QueueSize + 1)) /
+                Math.Pow(1 - ro / ChannelsCount, 2));
+            //Math.Pow(ro, ChannelsCount + 1) * p0 * (1d - Math.Pow(ro / ChannelsCount, QueueSize) * (QueueSize + 1d + QueueSize * ro / ChannelsCount)) /
+            //(Math.Pow(1d - ro / ChannelsCount, 2) * ChannelsCount * Factorial(ChannelsCount)));
+            Statistics.Add("Сер. к-ть вимог в СМО", Statistics["Сер. к-ть вимог що обслуговуються"] + Statistics["Сер. к-ть вимог в черзі"]);
         }
     }
 }
