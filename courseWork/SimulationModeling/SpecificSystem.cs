@@ -32,7 +32,7 @@ namespace courseWork.SimulationModeling
 
         private void Init()
         {
-            base.m_nodes = new Node[m_m+m_channels];
+            base.m_nodes = new Node[m_m+m_channels+1];
 
             for (int i = 0; i < m_nodes.Length; i++)
                 m_nodes[i] = new Node("node" + i, i);    //передается и номер узла для понимания перемещений в графе
@@ -51,7 +51,11 @@ namespace courseWork.SimulationModeling
 
 
                 if (i - 1 >= 0)
-                    children.Add(new NodeIntensityObject(m_nodes[i - 1], m_μ));
+                {
+                    int coef = Math.Min(i, m_channels);
+                    
+                    children.Add(new NodeIntensityObject(m_nodes[i - 1], coef * m_μ));
+                }
 
                 m_nodes[i].SetChildren(children.ToArray());
             }

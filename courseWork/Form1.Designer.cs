@@ -168,7 +168,7 @@
             this.maxTimeTextBox.Name = "maxTimeTextBox";
             this.maxTimeTextBox.Size = new System.Drawing.Size(72, 20);
             this.maxTimeTextBox.TabIndex = 2;
-            this.maxTimeTextBox.Text = "1000";
+            this.maxTimeTextBox.Text = "50000";
             // 
             // tabPage2
             // 
@@ -206,7 +206,7 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(638, 294);
+            this.tabPage3.Size = new System.Drawing.Size(638, 287);
             this.tabPage3.TabIndex = 1;
             this.tabPage3.Text = "Графік відмов";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -231,7 +231,7 @@
             series2.Name = "Відмови";
             this.FailuresChart.Series.Add(series1);
             this.FailuresChart.Series.Add(series2);
-            this.FailuresChart.Size = new System.Drawing.Size(632, 288);
+            this.FailuresChart.Size = new System.Drawing.Size(632, 281);
             this.FailuresChart.TabIndex = 0;
             this.FailuresChart.Text = "chart2";
             // 
