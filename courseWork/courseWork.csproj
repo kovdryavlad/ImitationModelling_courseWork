@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MathHelper.cs" />
     <Compile Include="SimulationModeling\Query.cs" />
     <Compile Include="SimulationModeling\TheoreticalProbabilities.cs" />
     <Compile Include="Form1.cs">

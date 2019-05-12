@@ -104,7 +104,7 @@ namespace courseWork.SimulationModeling
             GetTheoreticalStatistics(out pFailure, out q, out A, out r, out w, out k, out t_waiting, out t_processing, out t_AverageInSystem);
 
             double pFailure_stat, q_stat, A_stat, r_stat, w_stat, k_stat, t_waiting_stat, t_processing_stat, t_AverageInSystem_stat;
-            GetStatisticaltatistics(out pFailure_stat, out q_stat, out A_stat, out r_stat, out w_stat, out k_stat, out t_waiting_stat, out t_processing_stat, out t_AverageInSystem_stat);
+            GetStatisticaltatistics(out pFailure_stat, out q_stat, out A_stat, out r_stat, out w_stat, out k_stat);
 
             dataGridView.Rows.Add("Ймовірність відмови обслуговування", pFailure.ToString("0.0000"), pFailure_stat.ToString("0.0000"));
             dataGridView.Rows.Add("Відносна пропускна властивість", q.ToString("0.0000"), q_stat.ToString("0.0000"));
@@ -164,17 +164,19 @@ namespace courseWork.SimulationModeling
             t_AverageInSystem = statistics.m_t_system;
         }
 
-        private void GetStatisticaltatistics(out double pFailure_stat, out double q_stat, out double a_stat, out double r_stat, out double w_stat, out double k_stat, out double t_waiting_stat, out double t_processing_stat, out double t_AverageInSystem_stat)
+        private void GetStatisticaltatistics(out double pFailure_stat, out double q_stat, out double a_stat, out double r_stat, out double w_stat, out double k_stat)
         {
             int lastProbabilityIndex = Probabilities[0].Count-1;
 
             List<double> lastNodeProbabilities = Probabilities[m_nodes.Length - 1];
 
+            double ro = m_λ / m_μ;
 
             pFailure_stat = lastNodeProbabilities[lastProbabilityIndex];
             a_stat  = ProcessedCounter / base.m_time;
             q_stat = a_stat/m_λ;
 
+            /*
             r_stat =0;
 
             for (int i = 1; i <= m_m; i++)
@@ -187,19 +189,17 @@ namespace courseWork.SimulationModeling
 
             for (int i = 1; i <= m_m+1; i++)
                 k_stat += i * Probabilities[i][lastProbabilityIndex];
-
-
-            t_waiting_stat = m_processedQueries
-                                .Select(el=>el.StartProcessingTime - el.IncomeTime)
-                                .Average();
+                */
             
-            t_processing_stat = m_processedQueries
-                                .Select(el => el.EndProcessingTime - el.StartProcessingTime)
-                                .Average();
+            //r_stat = ["Ймов. стану " + (ChannelsCount + 1)] * (1d - (QueueSize + 1) * Math.Pow(ro / ChannelsCount, QueueSize) + QueueSize * Math.Pow(ro / ChannelsCount, QueueSize + 1)) /
+            //    Math.Pow(1 - ro / ChannelsCount, 2));
 
-            t_AverageInSystem_stat = m_processedQueries
-                                .Select(el => el.EndProcessingTime - el.IncomeTime)
-                                .Average(); ;
+           r_stat = Probabilities[m_channels + 1][lastProbabilityIndex] * (1d - (m_m + 1) * Math.Pow(ro / m_channels, m_m) + m_m * Math.Pow(ro / m_channels, m_m + 1)) /
+                Math.Pow(1 - ro / m_channels, 2);
+
+            w_stat = ro * (1d - Math.Pow(ro, m_channels + m_m) * Probabilities[0][lastProbabilityIndex] / (MathHelper.Factorial(m_channels) * Math.Pow(m_channels, m_m)));
+
+            k_stat = r_stat+ w_stat;
         }
     }
 }
